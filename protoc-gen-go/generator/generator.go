@@ -557,6 +557,7 @@ type Generator struct {
 
 	Param             map[string]string // Command-line parameters.
 	PackageImportPath string            // Go import path of the package we're generating code for
+	ProtoPrefix       string            // String to prefix imports of other generated proto packages
 	ImportPrefix      string            // String to prefix to imported package file names.
 	ImportMap         map[string]string // Mapping from .proto file name to import path
 
@@ -616,6 +617,8 @@ func (g *Generator) CommandLineParameters(parameter string) {
 		switch k {
 		case "import_prefix":
 			g.ImportPrefix = v
+		case "proto_prefix":
+			g.ProtoPrefix = v
 		case "import_path":
 			g.PackageImportPath = v
 		case "plugins":
@@ -1337,7 +1340,11 @@ func (g *Generator) generateImports() {
 		if substitution, ok := g.ImportMap[s]; ok {
 			importPath = substitution
 		}
-		importPath = g.ImportPrefix + importPath
+		if g.ProtoPrefix != "" {
+			importPath = g.ProtoPrefix + importPath
+		} else {
+			importPath = g.ImportPrefix + importPath
+		}
 		// Skip weak imports.
 		if g.weak(int32(i)) {
 			g.P("// skipping weak import ", fd.PackageName(), " ", strconv.Quote(importPath))

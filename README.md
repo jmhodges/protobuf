@@ -174,6 +174,10 @@ parameter list separated from the output directory by a colon:
 - `import_prefix=xxx` - a prefix that is added onto the beginning of
   all imports. Useful for things like generating protos in a
   subdirectory, or regenerating vendored protobufs in-place.
+- `proto_prefix=xxx` - a prefix that is added onto the beginning of imports of
+  other generated protobuf packages. Useful for keeping the protobuf library in
+  vendor but allowing protobuf packages to be stored in a different directory
+  than their proto file.
 - `import_path=foo/bar` - used as the package if no input files
   declare `go_package`. If it contains slashes, everything up to the
   rightmost slash is ignored.
